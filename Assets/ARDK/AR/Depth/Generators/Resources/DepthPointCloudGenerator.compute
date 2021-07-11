@@ -1,0 +1,57 @@
+﻿// TODO (awetherington) : Is there a way to register this shader as "ARDK/Generators/DepthPointCloudGenerator"?
+
+#pragma kernel Generate
+
+static const uint3 NumThreads = {8, 8, 1};
+
+uint DepthBufferWidth;
+float MinDepth;
+float MaxDepth;
+
+float VerticalOffsetPerMeter;
+
+// these are used to quickly calculate the world
+// position of each sample
+float3 UpperLeftNear;
+float3 UpperLeftFar;
+float3 DeltaXNear;
+float3 DeltaXFar;
+float3 DeltaYNear;
+float3 DeltaYFar;
+
+// vars that change per invocation 
+RWStructuredBuffer<float3> PointCloud;
+StructuredBuffer<float> Depth; 
+
+// helper method to get the index into the Depth buffer from the thread index
+int DepthBufferIndexFromId(in uint3 id) 
+{
+    return id.y * DepthBufferWidth + id.x;
+}
+
+// For a given Depth sample at a given pixel position, determine the world position
+// the sample represents.
+[numthreads(NumThreads.x, NumThreads.y, NumThreads.z)]
+void Generate(uint3 id : SV_DispatchThreadID)
+{
+    // get the Depth sample
+    int index = DepthBufferIndexFromId(id);
+    float depth = Depth[index];
+    
+    // get a linear lerping value for lerping between the UpperLeftNear and UpperLeftFar values
+    float t = (depth-MinDepth)/(MaxDepth-MinDepth);
+    
+    // calculate the vertical fixup based on the distance from the camera
+    float3 verticalFixup = float3(0,VerticalOffsetPerMeter * depth,0);
+    
+    // figure out the farthest postion this sample could be
+    float3 far = UpperLeftFar + DeltaYFar*id.y + DeltaXFar*id.x;
+    // figure out the nearest position this sample could be
+    float3 near = UpperLeftNear + DeltaYNear*id.y + DeltaXNear*id.x;
+
+    // lerp the correct position for this Depth sample   
+    float3 position = lerp(near, far, t);
+    
+    // apply the vertial fixup and save the value into the point cloud buffer
+    PointCloud[index] = position + verticalFixup;
+}
