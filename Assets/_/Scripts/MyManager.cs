@@ -8,6 +8,7 @@ using Niantic.ARDK.Networking.HLAPI;
 using Niantic.ARDK.Networking.HLAPI.Authority;
 using Niantic.ARDK.Networking.HLAPI.Data;
 using Niantic.ARDK.Networking.HLAPI.Object;
+using Niantic.ARDK.Networking.HLAPI.Object.Unity;
 using Niantic.ARDK.Networking.HLAPI.Routing;
 using Niantic.ARDK.Networking.MultipeerNetworkingEventArgs;
 using Niantic.ARDK.Utilities;
@@ -18,6 +19,8 @@ public class MyManager : MonoBehaviour
     private bool _synced;
     private bool _isHost;
     private bool _gameStart;
+    
+    private int _count = 0;
     
     /// Cache your location every frame
     private Vector3 _location;
@@ -33,13 +36,7 @@ public class MyManager : MonoBehaviour
     
     private IAuthorityReplicator _auth;
     
-    private INetworkedField<Vector3> _fieldPosition;
-    
-    private INetworkedField<byte> _gameStarted;
-    
-    private INetworkedField<string> _scoreText;
-    
-    private MessageStreamReplicator<Vector3> _hitStreamReplicator;
+    private INetworkedField<string> _testStr;
 
     /// <summary>
     /// ARセッション
@@ -58,6 +55,12 @@ public class MyManager : MonoBehaviour
     /// </summary>
     [SerializeField]
     private ARNetworkingManager _networkingManager;
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    [SerializeField]
+    private NetworkedUnityObject playerPrefab = null;
     
     /// <summary>
     /// ARセッションの初期化
@@ -91,6 +94,15 @@ public class MyManager : MonoBehaviour
             _arNetworking.PeerStateReceived -= OnPeerStateReceived;
             _arNetworking.ARSession.FrameUpdated -= OnFrameUpdated;
             _arNetworking.Networking.Connected -= OnDidConnect;
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            _count++;
+            _testStr.Value = _count.ToString();
         }
     }
     
@@ -187,52 +199,15 @@ public class MyManager : MonoBehaviour
         _auth.TryClaimRole(_isHost ? Role.Authority : Role.Observer, () => {}, () => {});
 
         var authToObserverDescriptor = _auth.AuthorityToObserverDescriptor(TransportType.ReliableUnordered);
-        _fieldPosition = new NetworkedField<Vector3>("fieldReplicator", authToObserverDescriptor, group);
-        _fieldPosition.ValueChangedIfReceiver += OnFieldPositionDidChange;
-        _scoreText = new NetworkedField<string>("scoreText", authToObserverDescriptor, group);
-        _scoreText.ValueChanged += OnScoreDidChange;
-
-        _gameStarted = new NetworkedField<byte>("gameStarted", authToObserverDescriptor, group);
-        _gameStarted.ValueChanged += value =>
-        {
-            _gameStart = Convert.ToBoolean(value.Value.Value);
-            if (_gameStart)
-            {
-                Debug.Log("GameStart");
-                // _ball = FindObjectOfType<BallBehaviour>().gameObject;
-            }
-        };
-        _hitStreamReplicator = new MessageStreamReplicator<Vector3>
-        (
-            "hitMessageStream",
-            _arNetworking.Networking.AnyToAnyDescriptor(TransportType.ReliableOrdered),
-            group
-        );
-        _hitStreamReplicator.MessageReceived += (args) =>
-        {
-            Debug.Log("Ball was hit");
-            if (_auth.LocalRole != Role.Authority) { return; }
-        };
+        _testStr = new NetworkedField<string>("scoreText", authToObserverDescriptor, group);
+        _testStr.ValueChanged += OnStrDidChange;
     }
     
     /// <summary>
     /// 
     /// </summary>
     /// <param name="args"></param>
-    private void OnFieldPositionDidChange(NetworkedFieldValueChangedArgs<Vector3> args)
-    {
-        var value = args.Value;
-        if (!value.HasValue) { return; }
-
-        var offsetPos = value.Value + new Vector3(0, 0, 1);
-        _player.transform.position = offsetPos;
-    }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="args"></param>
-    private void OnScoreDidChange(NetworkedFieldValueChangedArgs<string> args)
+    private void OnStrDidChange(NetworkedFieldValueChangedArgs<string> args)
     {
         Debug.Log(args.Value.GetOrDefault());
     }
