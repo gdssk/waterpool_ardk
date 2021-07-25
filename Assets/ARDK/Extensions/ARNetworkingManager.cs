@@ -98,6 +98,8 @@ namespace Niantic.ARDK.Extensions
 
       if (_networkSessionManager.Networking == null)
         _networkSessionManager.CreateSession();
+      
+      Debug.Log("ARNetworkingFactory.Create");
 
       _arNetworking = ARNetworkingFactory.Create(_arSessionManager.ARSession, _networkSessionManager.Networking);
     }

@@ -214,7 +214,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &15500277
 GameObject:
@@ -307,7 +307,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &15500284
 MonoBehaviour:
@@ -415,7 +415,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -432,8 +432,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1032179368}
   - component: {fileID: 1032179367}
+  - component: {fileID: 1032179370}
+  - component: {fileID: 1032179369}
   m_Layer: 0
-  m_Name: My Manager
+  m_Name: MyManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -452,6 +454,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _sessionManager: {fileID: 2989438510172279076}
+  preloadManager: {fileID: 1032179369}
+  _networkingManager: {fileID: 7315055105110486614}
 --- !u!4 &1032179368
 Transform:
   m_ObjectHideFlags: 0
@@ -464,8 +468,65 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1032179369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032179366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbd4c2c932f814cb991e2c486ec09b34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _manageUsingUnityLifecycle: 1
+  _features: 01000000
+--- !u!114 &1032179370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1032179366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61225b9e18604b82b4ba8d216a58e42e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _manifest: {fileID: 11400000, guid: abd79b58e742e45cda31b5d820c70876, type: 2}
+--- !u!4 &1207856078
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790734889}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1790734889
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1207856078}
+  m_Layer: 0
+  m_Name: Recovery GameObject (1207856078)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1858964733
 GameObject:
   m_ObjectHideFlags: 0
@@ -530,7 +591,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2989438510172279076
 MonoBehaviour:
@@ -546,10 +607,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _manageUsingUnityLifecycle: 0
   _arInfoSource: 0
-  _runOptions: 2
-  _useWithARNetworkingSession: 0
+  _runOptions: 0
+  _useWithARNetworkingSession: 1
   _isLightEstimationEnabled: 0
-  _isAutoFocusEnabled: 1
+  _isAutoFocusEnabled: 0
   _worldAlignment: 0
 --- !u!20 &3363422157461582800
 Camera:
@@ -684,7 +745,7 @@ Transform:
   m_Children:
   - {fileID: 3381041692508439554}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7315055105110486613
 GameObject:
@@ -697,6 +758,8 @@ GameObject:
   - component: {fileID: 5400245468923202007}
   - component: {fileID: 2989438510172279076}
   - component: {fileID: 7636423978866381908}
+  - component: {fileID: 7315055105110486615}
+  - component: {fileID: 7315055105110486614}
   m_Layer: 0
   m_Name: ARSceneManager
   m_TagString: Untagged
@@ -704,6 +767,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7315055105110486614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7315055105110486613}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfedfd6646c94b53b5ae944005ee7e76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _manageUsingUnityLifecycle: 1
+  _isSharedExperienceEnabled: 1
+--- !u!114 &7315055105110486615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7315055105110486613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f426bc7b950b4c17bd9decb32df6d152, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _manageUsingUnityLifecycle: 0
+  _arInfoSource: 0
+  _useWithARNetworkingSession: 1
+  _sessionIdentifier: mythiki
+  _inputField: {fileID: 0}
 --- !u!114 &7636423978866381908
 MonoBehaviour:
   m_ObjectHideFlags: 0
