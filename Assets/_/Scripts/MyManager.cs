@@ -99,7 +99,7 @@ public class MyManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && _testStr != null)
         {
             _count++;
             _testStr.Value = _count.ToString();
